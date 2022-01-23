@@ -7,6 +7,9 @@
              placeholder="Stock Name"
              name="stockName"
              formControlName="name">
+      <div *ngIf="name.invalid && (name.dirty || name.touched)">
+        Name is required.
+      </div>
     </div>
 
     <div class="stock-code">
@@ -14,6 +17,14 @@
              placeholder="Stock Code"
              name="stockCode"
              formControlName="code">
+      <div *ngIf="code.invalid && (code.dirty || code.touched)">
+        <div *ngIf="code.errors!['required']">
+          Code is required.
+        </div>
+        <div *ngIf="code.errors!['minlength']">
+          Code must be at least 2 characters.
+        </div>
+      </div>
     </div>
 
     <div class="stock-price">
@@ -21,11 +32,50 @@
              placeholder="Stock Price"
              name="stockPrice"
              formControlName="price">
+      <div *ngIf="price.invalid && (price.dirty || price.touched)">
+        <div *ngIf="price.errors['required']">
+          Price is required.
+        </div>
+        <div *ngIf="price.errors['min']">
+          Price must be positive.
+        </div>
+      </div>
     </div>
 
+    <div formArrayName="notablePeople">
+      <div *ngFor="let person of notablePeople.controls; let i = index"
+           [formGroupName]="i"
+           class="notable-people">
+        <div>
+          Person {{i + 1}}
+        </div>
+        <div>
+          <input type="text"
+                 placeholder="Person name"
+                 formControlName="name">
+        </div>
+        <div>
+          <input type="text"
+                 placeholder="Person title"
+                 formControlName="title">
+        </div>
+        <button type="button"
+                (click)="removeNotablePerson(i)">
+          Remove person
+        </button>
+      </div>
+    </div>
+    <button type="button"
+            (click)="addNotablePerson()">
+      Add notable person
+    </button>
+
     <button type="submit">Submit</button>
+    <button type="button" (click)="resetForm()">Reset</button>
+
   </form>
 </div>
 
 <p>Form Control value: {{ stockForm.value | json }}</p>
 <p>Form Control status: {{ stockForm.status | json }}</p>
+<p>Stock value: {{stock | json}}</p>
