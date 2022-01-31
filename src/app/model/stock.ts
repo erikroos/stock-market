@@ -1,21 +1,8 @@
-export class Stock {
-  favorite: boolean = false;
-  notablePeople: Person[];
-
-  constructor(public name: string,
-              public code: string,
-              public price: number,
-              public previousPrice: number,
-              public exchange: string) {
-    this.notablePeople = [];
-  }
-
-  isPositiveChange(): boolean {
-    return this.price >= this.previousPrice;
-  }
-}
-
-export class Person {
+export interface Stock {
   name: string;
-  title: string;
+  code: string;
+  price: number;
+  previousPrice: number;
+  exchange: string;
+  favorite: boolean;
 }

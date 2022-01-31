@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {Stock} from '../../model/stock';
+import {StockService} from "../../services/stock.service";
 
 @Component({
   selector: 'app-stock-item',
@@ -11,17 +12,10 @@ import {Stock} from '../../model/stock';
 export class StockItemComponent {
 
   @Input() public stock: Stock;
-  @Output() toggleFavorite: EventEmitter<Stock>;
 
-  constructor() {
-    this.toggleFavorite = new EventEmitter<Stock>();
-  }
+  constructor(private stockService: StockService) {}
 
   onToggleFavorite(event: any) {
-    this.toggleFavorite.emit(this.stock);
-  }
-
-  changeStockPrice() {
-    this.stock.price += 5;
+    this.stockService.toggleFavorite(this.stock).subscribe((stock) => this.stock.favorite = !this.stock.favorite);
   }
 }

@@ -1,5 +1,7 @@
 <h2>Create Stock Form</h2>
 
+<div>{{message}}</div>
+
 <div class="form-group">
   <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
     <div class="stock-name">
@@ -41,34 +43,6 @@
         </div>
       </div>
     </div>
-
-    <div formArrayName="notablePeople">
-      <div *ngFor="let person of notablePeople.controls; let i = index"
-           [formGroupName]="i"
-           class="notable-people">
-        <div>
-          Person {{i + 1}}
-        </div>
-        <div>
-          <input type="text"
-                 placeholder="Person name"
-                 formControlName="name">
-        </div>
-        <div>
-          <input type="text"
-                 placeholder="Person title"
-                 formControlName="title">
-        </div>
-        <button type="button"
-                (click)="removeNotablePerson(i)">
-          Remove person
-        </button>
-      </div>
-    </div>
-    <button type="button"
-            (click)="addNotablePerson()">
-      Add notable person
-    </button>
 
     <button type="submit">Submit</button>
     <button type="button" (click)="resetForm()">Reset</button>
