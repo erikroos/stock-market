@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { StockItemComponent } from './stock/stock-item/stock-item.component';
@@ -9,7 +10,8 @@ import { StockListComponent } from './stock/stock-list/stock-list.component';
 
 import { StockService } from "./services/stock.service";
 import { MessageService } from "./services/message.service";
-import { HttpClientModule } from "@angular/common/http";
+import { AuthService } from "./services/auth.service";
+import { StockAppInterceptor } from "./services/stock-app.interceptor";
 
 @NgModule({
   declarations: [
@@ -25,7 +27,13 @@ import { HttpClientModule } from "@angular/common/http";
   ],
   providers: [
     StockService,
-    MessageService
+    MessageService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: StockAppInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
