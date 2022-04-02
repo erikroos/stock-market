@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { debounceTime, switchMap, distinctUntilChanged, startWith, share } from "rxjs/operators";
 
 import { Stock } from "../../model/stock";
 import { StockService } from "../../services/stock.service";
-import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: 'app-stock-list',
@@ -14,29 +14,23 @@ import { AuthService } from "../../services/auth.service";
 export class StockListComponent implements OnInit {
 
   public stocks$: Observable<Stock[]>;
+  public searchString: string = '';
 
-  constructor(private stockService: StockService, private authService: AuthService) { }
+  private searchTerms: Subject<string> = new Subject<string>();
+
+  constructor(private stockService: StockService) { }
 
   ngOnInit(): void {
-    this.fetchStocks();
+    this.stocks$ = this.searchTerms.pipe(
+      startWith(this.searchString),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap((query) => this.stockService.getStocks(query)),
+      share()
+    )
   }
 
-  fetchStocks() {
-    this.stocks$ = this.stockService.getStocks();
-  }
-
-  setAuthToken() {
-    this.authService.authToken = 'TESTING';
-  }
-
-  resetAuthToken() {
-    this.authService.authToken = null;
-  }
-
-  makeFailingCall() {
-    this.stockService.makeFailingCall().subscribe(
-      (res) => console.log('Successfully made failing call', res),
-      (err) => console.error('Error making failing call',err)
-    );
+  search() {
+    this.searchTerms.next(this.searchString);
   }
 }

@@ -4,7 +4,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { StockItemComponent } from './stock/stock-item/stock-item.component';
-import { ReactiveFormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { CreateStockComponent } from './stock/create-stock/create-stock.component';
 import { StockListComponent } from './stock/stock-list/stock-list.component';
 
@@ -23,7 +23,8 @@ import { StockAppInterceptor } from "./services/stock-app.interceptor";
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     StockService,
